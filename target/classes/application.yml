@@ -1,0 +1,85 @@
+spring:
+  datasource:   #数据库链接对象
+    username: root
+    password: root
+    #driver-class-name: com.mysql.cj.jdbc.Driver
+    # url: jdbc:mysql://localhost:3306/blog_bbs?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone = GMT
+    #sql分析插件需要切换url及驱动具体看mybatis-plus官网
+    url: jdbc:p6spy:mysql://localhost:3306/blog_bbs?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone = GMT
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    #Spring Boot 默认是不注入这些属性值的，需要自己绑定
+    #druid 数据源专有配置
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    #配置监控统计拦截的filters，stat:监控统计、log4j：日志记录、wall：防御sql注入
+    #如果允许时报错  java.lang.ClassNotFoundException: org.apache.log4j.Priority
+    #则导入 log4j 依赖即可，Maven 地址：https://mvnrepository.com/artifact/log4j/log4j
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+    #配置开发环境
+  profiles:
+    active: dev
+
+  #邮箱配置
+  #平台地址，这里用的是qq邮箱，使用其他邮箱请更换
+  mail:
+    ##邮箱服务器地址
+    ##QQ smtp.qq.com
+    ##sina smtp.sina.cn
+    ##aliyun smtp.aliyun.com
+    ##163 smtp.163.com
+    host: smtp.qq.com
+    #改成自己的邮箱
+    username: 3212990982@qq.com
+    password: zpscqrybyzsodfcc
+    default-encoding: UTF-8
+    #加下面这两个配置才能通过qq给qq及其他邮箱(如163等)发邮件
+    protocol: smtp
+    properties.mail.smtp.ssl.enable: true
+
+#配置mapper
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**Mapper.xml
+  # 配置日志
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# Jwt
+pzy:
+  jwt:
+    # 加密秘钥
+    secret: f4e2e52034348f86b67cde581c0f9eb5
+    # token有效时长，7天 ，单位秒
+    expire: 604800
+    header: Authorization
+
+#redis
+redis:
+  host: localhost
+  password: root
+  port: 6379
+
+shiro-redis:
+  enabled: true
+  redis-manager:
+    host: 127.0.0.1:6379
+
+server:
+  port: 8089
